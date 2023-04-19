@@ -1,0 +1,126 @@
+{
+  # parallelism settings
+  "pipe-parallel-size": 1,
+  "model-parallel-size": 2,
+
+  # model settings
+  "num-layers": 16,
+  "hidden-size": 6144,
+  "num-attention-heads": 48,
+  "seq-length": 4096,
+  "max-position-embeddings": 4096,
+
+  # architecture design
+  "norm": "layernorm",
+  "pos-emb": "rotary",
+  "rotary_pct": 0.25,
+  "activation": "gelu",
+  "no-weight-tying": true,
+  "gpt_j_residual": true,
+  "output_layer_parallelism": "column",
+
+  # init methods
+  "init_method": "small_init",
+  "output_layer_init_method": "wang_init",
+
+  # fused ops
+  "scaled-upper-triang-masked-softmax-fusion": true,
+  "bias-gelu-fusion": true,
+  "attention-config": [[["flash"], 16]],
+
+  # optimizer settings
+  "optimizer": {
+    "type": "Adam",
+    "params": {
+      "lr": 1.5e-4,
+      "betas": [0.9, 0.95],
+      "eps": 1.0e-8
+    },
+  },
+  "min_lr": 1.5e-5,
+
+  # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
+  "zero_optimization": {
+    "stage": 1,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 1260000000,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 1260000000,
+    "contiguous_gradients": true,
+  },
+
+  # batch / data settings
+  "train_micro_batch_size_per_gpu": 8,
+  "gradient_accumulation_steps": 1,
+  "eval_batch_size": 1,
+  "data-impl": "mmap",
+
+  # activation checkpointing
+  "checkpoint-activations": true,
+  "checkpoint-num-layers": 1,
+  "partition-activations": true,
+  "synchronize-each-layer": true,
+
+  # regularization
+  "gradient_clipping": 1.0,
+  "weight-decay": 0.1,
+  "hidden-dropout": 0,
+  "attention-dropout": 0,
+
+  # precision settings
+  "fp16": {
+    "fp16": true,
+    "enabled": true,
+    "loss_scale": 0,
+    "loss_scale_window": 1000,
+    "initial_scale_power": 12,
+    "hysteresis": 2,
+    "min_loss_scale": 1,
+  },
+
+  # misc. training settings
+  "train-iters": 180000,
+  "lr-decay-iters": 180000,
+  "distributed-backend": "nccl",
+  "lr-decay-style": "cosine",
+  "warmup": 0.01,
+  "checkpoint-factor": 1000,
+  # 1 more than checkpoint-factor to avoid skipping evals if `evaluate` fails
+  "eval-interval": 1001,
+  "eval-iters": 10,
+  "eval_tasks": ["piqa", "sciq", "lambada_openai"],
+
+  # checkpoint settings
+  "iteration": 0,
+  "save": "",
+  "load": "",
+
+  # data settings
+  "train-data-paths": [],
+  "train-data-weights": [0.03, 0.02, 3.5, 13.87, 30.88, 0.34, 0.03, 0.1, 0.01, 0.5, 0.25, 0.25, 0.11, 1, 0.1, 0.5, 0.6, 0.19, 0.05, 2, 3.5, 4.15, 5.75, 3.17, 3.44, 3.49, 3, 6, 0.02, 2, 0.01, 3.95, 0.05, 1.09, 6.05],
+  "valid-data-paths": [],
+  "valid-data-weights": [0.03, 0.02, 3.5, 13.87, 30.88, 0.34, 0.03, 0.1, 0.01, 0.5, 0.25, 0.25, 0.11, 1, 0.1, 0.5, 0.6, 0.19, 0.05, 2, 3.5, 4.15, 5.75, 3.17, 3.44, 3.49, 3, 6, 0.02, 2, 0.01, 3.95, 0.05, 1.09, 6.05],
+  "test-data-paths": [],
+  "test-data-weights": [0.03, 0.02, 3.5, 13.87, 30.88, 0.34, 0.03, 0.1, 0.01, 0.5, 0.25, 0.25, 0.11, 1, 0.1, 0.5, 0.6, 0.19, 0.05, 2, 3.5, 4.15, 5.75, 3.17, 3.44, 3.49, 3, 6, 0.02, 2, 0.01, 3.95, 0.05, 1.09, 6.05],
+
+  # tokenizer settings
+  "tokenizer-type": "HFTokenizer",
+  "vocab-file": "/pile/20B_tokenizer.json",
+
+  # log settings
+  "log-interval": 10,
+  "steps_per_print": 10,
+  "wall_clock_breakdown": true,
+
+  "use_wandb": true,
+  "wandb_host": "",
+  "wandb_team": "",
+  "wandb_project": "",
+  "wandb_group": "",
+  "wandb_name": "",
+
+  # multi-node launcher
+  "launcher": "slurm",
+  "deepspeed_slurm": true
+}
