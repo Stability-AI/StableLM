@@ -38,6 +38,7 @@ All StableLM models are hosted on [the Huggingface hub](https://huggingface.co/S
 Get started chatting with `StableLM-Tuned-Alpha` by using the following code snippet:
 
 ```python
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList
 
 tokenizer = AutoTokenizer.from_pretrained("stabilityai/stablelm-tuned-alpha-7b")
