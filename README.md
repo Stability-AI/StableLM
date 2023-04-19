@@ -33,7 +33,7 @@ As a proof-of-concept, we also fine-tuned the model with [Stanford Alpaca](https
 
 ## Quickstart
 
-All StableLM models are hosted on [the Huggingface hub](https://huggingface.co/StabilityAI). Check out this [notebook](https://github.com/Stability-AI/StableLM/blob/main/notebooks/stablelm_alpha.ipynb) to run inference with limited GPU capabilities.
+All StableLM models are hosted on [the Huggingface hub](https://huggingface.co/StabilityAI). Check out this [notebook](https://github.com/Stability-AI/StableLM/blob/main/notebooks/stablelm-alpha.ipynb) to run inference with limited GPU capabilities.
 
 Get started chatting with `StableLM-Tuned-Alpha` by using the following code snippet:
 
