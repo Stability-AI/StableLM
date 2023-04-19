@@ -22,14 +22,14 @@ An upcoming technical report will document the model specifications and the trai
 
 As a proof-of-concept, we also fine-tuned the model with [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)'s procedure using a combination of five recent datasets for conversational agents: Stanford's [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), Nomic-AI's [gpt4all](https://github.com/nomic-ai/gpt4all), RyokoAI's [ShareGPT52K](https://huggingface.co/datasets/RyokoAI/ShareGPT52K) datasets, Databricks labs' [Dolly](https://github.com/databrickslabs/dolly), and Anthropic's [HH](https://github.com/anthropics/hh-rlhf). We will be releasing these models as StableLM-Tuned-Alpha.
 
-| Size | StableLM-Base-Alpha                        | StableLM-Tuned-Alpha                      | Training Tokens | Web Demo |
-|----------------|-------------------------------|-----------------------------|----------|----------|
-|3B| [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-3b/) |[checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-3b/)            | 800B | |
-|7B| [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b) |[checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-7b)            | 800B | [HuggingFace](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat) |
-|15B| (in progress) | (pending) | | |
-|30B| (in progress) | (pending) | | |
-|65B| (in progress) | (pending) | | |
-|175B| (planned) |  |  | |
+| Size | StableLM-Base-Alpha                                                      | StableLM-Tuned-Alpha                                                      | Training Tokens | Parameters    | Web Demo                                                                           |
+|------|--------------------------------------------------------------------------|---------------------------------------------------------------------------|-----------------|---------------|------------------------------------------------------------------------------------|
+| 3B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-3b/) | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-3b/) | 800B            | 3,638,525,952 |                                                                                    |
+| 7B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b)  | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-7b)  | 800B            | 7,869,358,080 | [HuggingFace](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat) |
+| 15B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
+| 30B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
+| 65B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
+| 175B | (planned)                                                                |                                                                           |                 |               |                                                                                    |
 
 ## Quickstart
 
