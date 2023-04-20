@@ -308,7 +308,7 @@ Want to get involved?
 - ... Reach out to us with ideas on our [Discord](https://discord.com/invite/stablediffusion)
 
 ## Potential issues
-As is typical for any pretrained Large Language Model without additional finetuning and reinforcement learning, the responses a user gets might be of varying quality and might potentially include offensive language and views. This is expected to be improved with scale, better data, community feedback, and optimisation.
+As is typical for any pretrained Large Language Model without additional finetuning and reinforcement learning, the responses a user gets might be of varying quality and might potentially include offensive language and views. This is expected to be improved with scale, better data, community feedback, and optimization.
 
 ## Acknowledgements
 
