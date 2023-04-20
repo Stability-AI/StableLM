@@ -11,7 +11,7 @@ This repository contains Stability AI's ongoing development of the StableLM seri
 
 - Released initial set of StableLM-alpha models, with 3B and 7B parameters. 15B and 30B models are on the way. Base models are released under [CC BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
-- Try to chat with our 7B model, `StableLM-Tuned-Alpha-7B`, on [HuggingFace Spaces](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat).
+- Try to chat with our 7B model, `StableLM-Tuned-Alpha-7B`, on [Hugging Face Spaces](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat).
 
 ## Models
 
@@ -25,7 +25,7 @@ As a proof-of-concept, we also fine-tuned the model with [Stanford Alpaca](https
 | Size | StableLM-Base-Alpha                                                      | StableLM-Tuned-Alpha                                                      | Training Tokens | Parameters    | Web Demo                                                                           |
 |------|--------------------------------------------------------------------------|---------------------------------------------------------------------------|-----------------|---------------|------------------------------------------------------------------------------------|
 | 3B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-3b/) | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-3b/) | 800B            | 3,638,525,952 |                                                                                    |
-| 7B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b)  | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-7b)  | 800B            | 7,869,358,080 | [HuggingFace](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat) |
+| 7B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b)  | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-7b)  | 800B            | 7,869,358,080 | [Hugging Face](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat) |
 | 15B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
 | 30B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
 | 65B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
@@ -33,7 +33,7 @@ As a proof-of-concept, we also fine-tuned the model with [Stanford Alpaca](https
 
 ## Quickstart
 
-All StableLM models are hosted on [the Huggingface hub](https://huggingface.co/StabilityAI). Check out this [notebook](https://github.com/Stability-AI/StableLM/blob/main/notebooks/stablelm-alpha.ipynb) to run inference with limited GPU capabilities.
+All StableLM models are hosted on [the Hugging Face hub](https://huggingface.co/StabilityAI). Check out this [notebook](https://github.com/Stability-AI/StableLM/blob/main/notebooks/stablelm-alpha.ipynb) to run inference with limited GPU capabilities.
 
 Get started chatting with `StableLM-Tuned-Alpha` by using the following code snippet:
 
