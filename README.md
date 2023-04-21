@@ -1,5 +1,7 @@
 # StableLM: Stability AI Language Models
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Stability-AI/StableLM//blob/main/notebooks/stablelm-alpha.ipynb)
+
 ![Stochastic Parrot](/assets/mascot.png)
 <br/>*“A Stochastic Parrot, flat design, vector art” — [Stable Diffusion XL](https://clipdrop.co/stable-diffusion)*
 
