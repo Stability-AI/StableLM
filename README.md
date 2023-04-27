@@ -47,11 +47,8 @@ model.half().cuda()
 
 class StopOnTokens(StoppingCriteria):
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
-        stop_ids = [50278, 50279, 50277, 1, 0]
-        for stop_id in stop_ids:
-            if input_ids[0][-1] == stop_id:
-                return True
-        return False
+        stop_ids = set([50278, 50279, 50277, 1, 0])
+        return input_ids[0][-1] in stop_ids
 
 system_prompt = """<|SYSTEM|># StableLM Tuned (Alpha version)
 - StableLM is a helpful and harmless open-source AI language model developed by StabilityAI.
