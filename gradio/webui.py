@@ -48,42 +48,40 @@ if "tuned" in model_name:
 else:
     prompt = user_prompt
 
-# Sampling args
-max_new_tokens = 128 #@param {type:"slider", min:32.0, max:3072.0, step:32}
-temperature = 0.7 #@param {type:"slider", min:0.0, max:1.25, step:0.05}
-top_k = 0 #@param {type:"slider", min:0.0, max:1.0, step:0.05}
-top_p = 0.9 #@param {type:"slider", min:0.0, max:1.0, step:0.05}
-do_sample = True #@param {type:"boolean"}
+def complete(prompt):
+    # Sampling args
+    max_new_tokens = 128  # @param {type:"slider", min:32.0, max:3072.0, step:32}
+    temperature = 0.7  # @param {type:"slider", min:0.0, max:1.25, step:0.05}
+    top_k = 0  # @param {type:"slider", min:0.0, max:1.0, step:0.05}
+    top_p = 0.9  # @param {type:"slider", min:0.0, max:1.0, step:0.05}
+    do_sample = True  # @param {type:"boolean"}
 
-print(f"Sampling with: `{max_new_tokens=}, {temperature=}, {top_k=}, {top_p=}, {do_sample=}`")
+    print(f"Sampling with: `{max_new_tokens=}, {temperature=}, {top_k=}, {top_p=}, {do_sample=}`")
 
-# Create `generate` inputs
-inputs = tokenizer(prompt, return_tensors="pt")
-inputs.to(model.device)
+    # Create `generate` inputs
+    inputs = tokenizer(prompt, return_tensors="pt")
+    inputs.to(model.device)
 
-# Generate
-tokens = model.generate(
-    **inputs,
-    max_new_tokens=max_new_tokens,
-    temperature=temperature,
-    top_k=top_k,
-    top_p=top_p,
-    do_sample=do_sample,
-    pad_token_id=tokenizer.eos_token_id,
-    stopping_criteria=StoppingCriteriaList([StopOnTokens()])
-)
+    # Generate
+    tokens = model.generate(
+        **inputs,
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        top_k=top_k,
+        top_p=top_p,
+        do_sample=do_sample,
+        pad_token_id=tokenizer.eos_token_id,
+        stopping_criteria=StoppingCriteriaList([StopOnTokens()])
+    )
 
-# Extract out only the completion tokens
-completion_tokens = tokens[0][inputs['input_ids'].size(1):]
-completion = tokenizer.decode(completion_tokens, skip_special_tokens=True)
+    # Extract out only the completion tokens
+    completion_tokens = tokens[0][inputs['input_ids'].size(1):]
+    completion = tokenizer.decode(completion_tokens, skip_special_tokens=True)
 
-# Display
-print(user_prompt + " ", end="")
-print(completion)
-def greet(name):
-    return "Hello " + name + "!"
+    return prompt + " " + completion
 
-iface = gr.Interface(fn=greet, inputs="text", outputs="text", share=True, title="Greeting", description="Greet someone!")
+
+iface = gr.Interface(fn=complete, inputs="text", outputs="text", share=True, title="StableLM", description="StableLM web ui")
 
 iface.launch(server_port=8888)
 
