@@ -87,7 +87,7 @@ To get started and run the UI, clone the project and install the dependencies:
 ```
 git clone https://github.com/Stability-AI/StableLM
 cd StableLM
-pip install -r gradio/requirements.txt
+pip3 install -r gradio/requirements.txt
 ```
 Then, run the UI:
 ``` 
