@@ -80,6 +80,21 @@ The system prompt is
 - StableLM will refuse to participate in anything that could harm a human.
 ```
 
+## Gradio Web UI
+You can also run a Gradio based Web UI, found under the `gradio` folder. 
+
+To get started and run the UI, clone the project and install the dependencies:
+```
+git clone https://github.com/Stability-AI/StableLM
+cd StableLM
+pip install -r gradio/requirements.txt
+```
+Then, run the UI:
+``` 
+python gradio/webui.py
+```
+
+
 ## Fun with StableLM-Tuned-Alpha
 This section contains a collection of fun cherry-picked examples of what you can do with `stablelm-tuned-alpha`. 
 
