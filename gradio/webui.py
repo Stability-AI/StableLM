@@ -49,13 +49,13 @@ else:
     prompt = user_prompt
 
 
-def complete(prompt):
+def complete(prompt, max_new_tokens=128, temperature=0.7, top_k=0, top_p=0.9, do_sample=True):
     # Sampling args
-    max_new_tokens = 128  # @param {type:"slider", min:32.0, max:3072.0, step:32}
-    temperature = 0.7  # @param {type:"slider", min:0.0, max:1.25, step:0.05}
-    top_k = 0  # @param {type:"slider", min:0.0, max:1.0, step:0.05}
-    top_p = 0.9  # @param {type:"slider", min:0.0, max:1.0, step:0.05}
-    do_sample = True  # @param {type:"boolean"}
+    # max_new_tokens = 128  # @param {type:"slider", min:32.0, max:3072.0, step:32}
+    # temperature = 0.7  # @param {type:"slider", min:0.0, max:1.25, step:0.05}
+    # top_k = 0  # @param {type:"slider", min:0.0, max:1.0, step:0.05}
+    # top_p = 0.9  # @param {type:"slider", min:0.0, max:1.0, step:0.05}
+    # do_sample = True  # @param {type:"boolean"}
 
     print(f"Sampling with: `{max_new_tokens=}, {temperature=}, {top_k=}, {top_p=}, {do_sample=}`")
 
@@ -82,7 +82,19 @@ def complete(prompt):
     return prompt + " " + completion
 
 
-iface = gr.Interface(fn=complete, inputs="text", outputs="text", share=True, title="StableLM", description="StableLM web ui")
+iface = gr.Interface(
+    fn=complete,
+    inputs=["text",
+            gr.Slider(32, 3072, 32, default=128),
+            gr.Slider(0.0, 1.25, 0.05, default=0.7),
+            gr.Slider(0.0, 1.0, 0.05, default=0.0),
+            gr.Slider(0.0, 1.0, 0.05, default=0.9),
+            "checkbox"],
+    outputs="text",
+    share=True,
+    title="StableLM",
+    description="StableLM web ui"
+)
 
 iface.launch(server_port=8888)
 
