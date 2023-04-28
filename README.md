@@ -91,7 +91,7 @@ pip3 install -r gradio/requirements.txt
 ```
 Then, run the UI:
 ``` 
-python gradio/webui.py
+python3 gradio/webui.py
 ```
 
 
