@@ -3,36 +3,16 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, StoppingCriteria, StoppingCriteriaList
 
 
-def hr():
-    print("-" * 80)
-
-
-def cprint(msg: str, color: str = "blue", **kwargs) -> None:
-    color_codes = {
-        "blue": "\033[34m",
-        "red": "\033[31m",
-        "green": "\033[32m",
-        "yellow": "\033[33m",
-        "purple": "\033[35m",
-        "cyan": "\033[36m",
-    }
-
-    if color not in color_codes:
-        raise ValueError(f"Invalid info color: `{color}`")
-
-    print(color_codes[color] + msg + "\033[0m", **kwargs)
-
-
 model_name = "stabilityai/stablelm-tuned-alpha-7b" #@param ["stabilityai/stablelm-tuned-alpha-7b", "stabilityai/stablelm-base-alpha-7b", "stabilityai/stablelm-tuned-alpha-3b", "stabilityai/stablelm-base-alpha-3b"]
 
-cprint(f"Using `{model_name}`", color="blue")
+print(f"Using `{model_name}`")
 
 # Select "big model inference" parameters
 torch_dtype = "float16" #@param ["float16", "bfloat16", "float"]
 load_in_8bit = False #@param {type:"boolean"}
 device_map = "auto"
 
-cprint(f"Loading with: `{torch_dtype=}, {load_in_8bit=}, {device_map=}`")
+print(f"Loading with: `{torch_dtype=}, {load_in_8bit=}, {device_map=}`")
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(
@@ -75,8 +55,7 @@ top_k = 0 #@param {type:"slider", min:0.0, max:1.0, step:0.05}
 top_p = 0.9 #@param {type:"slider", min:0.0, max:1.0, step:0.05}
 do_sample = True #@param {type:"boolean"}
 
-cprint(f"Sampling with: `{max_new_tokens=}, {temperature=}, {top_k=}, {top_p=}, {do_sample=}`")
-hr()
+print(f"Sampling with: `{max_new_tokens=}, {temperature=}, {top_k=}, {top_p=}, {do_sample=}`")
 
 # Create `generate` inputs
 inputs = tokenizer(prompt, return_tensors="pt")
@@ -100,7 +79,7 @@ completion = tokenizer.decode(completion_tokens, skip_special_tokens=True)
 
 # Display
 print(user_prompt + " ", end="")
-cprint(completion, color="green")
+print(completion)
 def greet(name):
     return "Hello " + name + "!"
 
