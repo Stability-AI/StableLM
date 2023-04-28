@@ -48,6 +48,7 @@ if "tuned" in model_name:
 else:
     prompt = user_prompt
 
+
 def complete(prompt):
     # Sampling args
     max_new_tokens = 128  # @param {type:"slider", min:32.0, max:3072.0, step:32}
