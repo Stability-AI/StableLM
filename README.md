@@ -27,9 +27,9 @@ Due to the original non-commercial license of LLaMA, we can only release the wei
 
 Please visit HuggingFace checkpoint for more information about how to combine our delta weights with the original model.
 
-| Model | Download                                                      | Web Demo |
-|------|-----------|----------------------|
-| StableVicuna-13B   | [checkpoint](https://huggingface.co/CarperAI/stable-vicuna-13b-delta/) | [Hugging Face](https://huggingface.co/spaces/CarperAI/StableVicuna/) |
+| Model            | Download                                                               | Web Demo                                                             | Cite |
+| ---------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------- |------|
+| StableVicuna-13B | [checkpoint](https://huggingface.co/CarperAI/stable-vicuna-13b-delta/) | [Hugging Face](https://huggingface.co/spaces/CarperAI/StableVicuna/) | [![DOI:10.57967/hf/0588](https://zenodo.org/badge/DOI/10.1007/978-3-319-76207-4_15.svg)](https://doi.org/10.57967/hf/0588) |
 
 ### StableLM-Alpha
 StableLM-Alpha models are trained on the new dataset that build on [The Pile](https://pile.eleuther.ai/), which contains 1.5 trillion tokens, roughly 3x the size of The Pile. These models will be trained on up to 1.5 trillion tokens. The context length for these models is 4096 tokens.
