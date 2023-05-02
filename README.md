@@ -83,6 +83,7 @@ The system prompt is
 ## Gradio Web UI
 You can also run a Gradio based Web UI, found under the `gradio` folder. 
 
+![Web UI Screenshot](assets/webui-screenshot.png)
 To get started and run the UI, clone the project and install the dependencies:
 ```
 git clone https://github.com/Stability-AI/StableLM
@@ -93,6 +94,9 @@ Then, run the UI:
 ``` 
 python3 gradio/webui.py
 ```
+A message will appear in the console with a link to the UI. Click on the link to open the UI in your browser.
+
+
 
 
 ## Fun with StableLM-Tuned-Alpha
