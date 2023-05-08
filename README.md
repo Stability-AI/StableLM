@@ -7,6 +7,10 @@ This repository contains Stability AI's ongoing development of the StableLM seri
 
 ## News
 
+*April 28, 2023*
+
+- Released StableVicuna-13B, our RLHF fine-tune of [Vicuna-13B v0](https://huggingface.co/lmsys/vicuna-13b-delta-v0), which itself is a fine-tune of [LLaMA-13B](https://github.com/facebookresearch/llama). Delta weights over the original Llama model is released under ([CC BY-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
+
 *April 20, 2023*
 
 - Released initial set of StableLM-alpha models, with 3B and 7B parameters. 15B and 30B models are on the way. Base models are released under [CC BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
@@ -14,6 +18,18 @@ This repository contains Stability AI's ongoing development of the StableLM seri
 - Try to chat with our 7B model, `StableLM-Tuned-Alpha-7B`, on [Hugging Face Spaces](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat).
 
 ## Models
+
+### StableVicuna
+
+StableVicuna is an RLHF fine-tune of [Vicuna-13B v0](https://huggingface.co/lmsys/vicuna-13b-delta-v0), which itself is a fine-tune of [LLaMA-13B](https://github.com/facebookresearch/llama). It is our attempt at creating an open-source RLHF LLM Chatbot. This model is developed by StabilityAI's CarperAI team, with [Duy V. Phung](https://github.com/PhungVanDuy) leading the training effort.
+
+Due to the original non-commercial license of LLaMA, we can only release the weights of our model as deltas over the original model's weights. StableVicuna's delta weights are released under ([CC BY-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
+
+Please visit HuggingFace checkpoint for more information about how to combine our delta weights with the original model.
+
+| Model            | Download                                                               | Web Demo                                                             | Cite |
+| ---------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------- |------|
+| StableVicuna-13B | [checkpoint](https://huggingface.co/CarperAI/stable-vicuna-13b-delta/) | [Hugging Face](https://huggingface.co/spaces/CarperAI/StableVicuna/) | [![DOI:10.57967/hf/0588](https://zenodo.org/badge/DOI/10.1007/978-3-319-76207-4_15.svg)](https://doi.org/10.57967/hf/0588) |
 
 ### StableLM-Alpha
 StableLM-Alpha models are trained on the new dataset that build on [The Pile](https://pile.eleuther.ai/), which contains 1.5 trillion tokens, roughly 3x the size of The Pile. These models will be trained on up to 1.5 trillion tokens. The context length for these models is 4096 tokens.
