@@ -7,17 +7,78 @@ This repository contains Stability AI's ongoing development of the StableLM seri
 
 ## News
 
+*August 5, 2023*
+
+- Released patched StableLM-Alpha v2 models with 3B and 7B parameters.
+
 *April 28, 2023*
 
 - Released StableVicuna-13B, our RLHF fine-tune of [Vicuna-13B v0](https://huggingface.co/lmsys/vicuna-13b-delta-v0), which itself is a fine-tune of [LLaMA-13B](https://github.com/facebookresearch/llama). Delta weights over the original Llama model is released under ([CC BY-NC-SA-4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
 
 *April 20, 2023*
 
-- Released initial set of StableLM-alpha models, with 3B and 7B parameters. 15B and 30B models are on the way. Base models are released under [CC BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- Released initial set of StableLM-Alpha models, with 3B and 7B parameters. Base models are released under [CC BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 - Try to chat with our 7B model, `StableLM-Tuned-Alpha-7B`, on [Hugging Face Spaces](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat).
 
 ## Models
+
+### StableLM-Alpha v2
+
+StableLM-Alpha v2 models significantly improve on the initial Alpha models by incorporating architectural improvements such as SwiGLU ([Shazeer, 2020](https://arxiv.org/abs/2002.05202)) and using higher-quality data sources, as discussed below.  The context length for these models is 4096 tokens.
+
+| Size | StableLM-Base-Alpha-v2                                                     | Training Tokens | Parameters    |
+|------|----------------------------------------------------------------------------|-----------------|---------------|
+| 3B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-3b-v2) | 1.1T            | 2,796,431,360 |
+| 7B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b-v2) | 1.1T            | 6,890,209,280 |
+
+#### Training Details
+
+Please refer to the provided YAML configuration files for hyperparameter details. E.g. for the extended `StableLM-Alpha-3B-v2` model, see [stablelm-base-alpha-3b-v2-4k-extension.yaml](./configs/stablelm-base-alpha-3b-v2-4k-extension.yaml).
+
+Following similar work, we use a multi-stage approach to context length extension ([Nijkamp et al., 2023](https://blog.salesforceairesearch.com/xgen/)), scheduling 1 trillion tokens at context length 2048 followed by 100 billion tokens at 4096. We found that sequence length warmup ([Li et al., 2022](https://arxiv.org/abs/2108.06084)) helped stabilize early spikes during the first ~80 billion tokens of pre-training. However, it was not applied to the final runs due to significant throughput penalties as length shapes grew across the curriculum.
+
+#### Training Data
+
+The most impactful changes for StableLM-Alpha-v2 downstream performance were in the usage of higher quality data sources and mixtures; specifically, the use of [RefinedWeb](https://huggingface.co/datasets/tiiuae/falcon-refinedweb) and [C4](https://huggingface.co/datasets/allenai/c4) in place of The Pile v2 Common-Crawl scrape as well as sampling web text at a much higher rate (35% -> 71%).
+
+The first pre-training stage relies on 1 trillion tokens sourced from a mix of the public Falcon RefinedWeb extract ([Penedo et al., 2023](https://huggingface.co/datasets/tiiuae/falcon-refinedweb)), RedPajama-Data ([Together Computer., 2023](https://github.com/togethercomputer/RedPajama-Data)), The Pile ([Gao et al., 2020](https://arxiv.org/abs/2101.00027)), and internal datasets with web text sampled at a rate of 71%.
+
+In the second stage, we include the StarCoder ([Li et al., 2023](https://arxiv.org/abs/2305.06161)) dataset and down sample web text to 55% while increasing sampling proportions of naturally long text examples in the aforementioned sources.
+
+#### Evaluation
+
+The following zero-shot evaluations are performed with the `lm-evaluation-harness` at commit [`df3da98c5405deafd519c2ddca52bb7c3fe36bef`](https://github.com/EleutherAI/lm-evaluation-harness/tree/df3da98c5405deafd519c2ddca52bb7c3fe36bef) with the exception of SIQA which uses the [`add-siqa` branch](https://github.com/EleutherAI/lm-evaluation-harness/tree/add-siqa) with prompt format
+`{doc['context']}\nQuestion: {doc['question']}\nAnswer:`.
+
+| Model                     | ARC Challenge✱ | ARC Easy✱ | BoolQ | HellaSwag✱ | LAMBADA<br>OpenAI | OpenBookQA | PIQA  | SIQA  | TruthfulQA▲ | Winogrande | Average |
+| ------------------------- |:---------------:|:----------:|:-----:|:-----------:|:-----------------:|:----------:|:-----:|:-----:|:------------:|:----------:|:-------:|
+| **StableLM-Alpha-7B-v2** | 40.53           | 69.11      | 70.31 | 74.27       | 74.19             | 30.40      | 78.45 | 42.43 | 36.46        | 68.82      | 58.50   |
+| **StableLM-Alpha-3B-v2** | 35.07           | 63.26      | 64.56 | 68.58       | 70.25             | 26.40      | 76.01 | 42.48 | 35.87        | 62.12      | 54.46   |
+| LLaMA-2-7B                | 46.16           | 74.54      | 77.74 | 75.94       | 73.47             | 31.40      | 77.75 | 43.50 | 38.97        | 69.61      | 60.91   |
+| MTP-7B                    | 41.89           | 70.03      | 73.94 | 76.17       | 68.64             | 31.40      | 78.89 | 45.14 | 33.49        | 68.03      | 58.76   |
+| OpenLLaMA-7B-v2           | 42.41           | 69.65      | 71.41 | 74.65       | 71.05             | 30.20      | 79.16 | 41.97 | 34.57        | 65.82      | 58.09   |
+| RedPajama-INCITE-7B-Base  | 39.42           | 69.19      | 70.76 | 70.33       | 71.34             | 29.00      | 77.15 | 42.58 | 33.01        | 64.33      | 56.71   |
+| BTLM-3B-8K           | 37.63           | 67.09      | 69.63 | 69.78       | 66.23             | 27.60      | 75.84 | 42.78 | 36.00        | 64.96      | 55.75   |
+| OpenLLaMA-3B-v2           | 36.09           | 63.51      | 65.69 | 69.99       | 66.74             | 26.00      | 76.66 | 41.20 | 34.59        | 62.90      | 54.34   |
+| Pythia-2.8B (deduped)     | 32.94           | 59.09      | 64.13 | 59.44       | 65.15             | 23.80      | 74.10 | 40.94 | 35.56        | 58.25      | 51.34   |
+| StableLM-Alpha-7B    | 27.05           | 44.87      | 60.06 | 41.22       | 55.11             | 21.40      | 66.76 | 39.46 | 39.96        | 50.12      | 44.60   |
+| StableLM-Alpha-3B    | 25.77           | 42.05      | 57.65 | 38.31       | 41.72             | 17.00      | 63.82 | 35.62 | 40.53        | 52.64      | 41.51   |
+
+✱: Denotes byte-length normalized accuracy (`acc_norm`) as described in [Gao, 2021](https://blog.eleuther.ai/multiple-choice-normalization/).
+
+▲: We score TruthfulQA using the normalized total probability assigned to the set of true answers (`mc2`).
+
+### StableLM-Alpha
+
+StableLM-Alpha models are trained on a new dataset that builds on [The Pile](https://pile.eleuther.ai/), which contains 1.5 trillion tokens, roughly 3x the size of The Pile. The context length for these models is 4096 tokens.
+
+As a proof-of-concept, we also fine-tuned the model with [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)'s procedure using a combination of five recent datasets for conversational agents: Stanford's [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), Nomic-AI's [gpt4all](https://github.com/nomic-ai/gpt4all), RyokoAI's [ShareGPT52K](https://huggingface.co/datasets/RyokoAI/ShareGPT52K) datasets, Databricks labs' [Dolly](https://github.com/databrickslabs/dolly), and Anthropic's [HH](https://github.com/anthropics/hh-rlhf). We will be releasing these models as StableLM-Tuned-Alpha.
+
+| Size | StableLM-Base-Alpha                                                      | StableLM-Tuned-Alpha                                                      | Training Tokens | Parameters    | Web Demo                                                                           |
+|------|--------------------------------------------------------------------------|---------------------------------------------------------------------------|-----------------|---------------|------------------------------------------------------------------------------------|
+| 3B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-3b/) | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-3b/) | 800B            | 3,638,525,952 |                                                                                    |
+| 7B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b)  | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-7b)  | 800B            | 7,869,358,080 | [Hugging Face](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat) |
 
 ### StableVicuna
 
@@ -30,22 +91,6 @@ Please visit HuggingFace checkpoint for more information about how to combine ou
 | Model            | Download                                                               | Web Demo                                                             | Cite |
 | ---------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------- |------|
 | StableVicuna-13B | [checkpoint](https://huggingface.co/CarperAI/stable-vicuna-13b-delta/) | [Hugging Face](https://huggingface.co/spaces/CarperAI/StableVicuna/) | [![DOI:10.57967/hf/0588](https://zenodo.org/badge/DOI/10.1007/978-3-319-76207-4_15.svg)](https://doi.org/10.57967/hf/0588) |
-
-### StableLM-Alpha
-StableLM-Alpha models are trained on the new dataset that build on [The Pile](https://pile.eleuther.ai/), which contains 1.5 trillion tokens, roughly 3x the size of The Pile. These models will be trained on up to 1.5 trillion tokens. The context length for these models is 4096 tokens.
-
-An upcoming technical report will document the model specifications and the training settings.
-
-As a proof-of-concept, we also fine-tuned the model with [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca)'s procedure using a combination of five recent datasets for conversational agents: Stanford's [Alpaca](https://github.com/tatsu-lab/stanford_alpaca), Nomic-AI's [gpt4all](https://github.com/nomic-ai/gpt4all), RyokoAI's [ShareGPT52K](https://huggingface.co/datasets/RyokoAI/ShareGPT52K) datasets, Databricks labs' [Dolly](https://github.com/databrickslabs/dolly), and Anthropic's [HH](https://github.com/anthropics/hh-rlhf). We will be releasing these models as StableLM-Tuned-Alpha.
-
-| Size | StableLM-Base-Alpha                                                      | StableLM-Tuned-Alpha                                                      | Training Tokens | Parameters    | Web Demo                                                                           |
-|------|--------------------------------------------------------------------------|---------------------------------------------------------------------------|-----------------|---------------|------------------------------------------------------------------------------------|
-| 3B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-3b/) | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-3b/) | 800B            | 3,638,525,952 |                                                                                    |
-| 7B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-base-alpha-7b)  | [checkpoint](https://huggingface.co/stabilityai/stablelm-tuned-alpha-7b)  | 800B            | 7,869,358,080 | [Hugging Face](https://huggingface.co/spaces/stabilityai/stablelm-tuned-alpha-chat) |
-| 15B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
-| 30B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
-| 65B  | (in progress)                                                            | (pending)                                                                 |                 |               |                                                                                    |
-| 175B | (planned)                                                                |                                                                           |                 |               |                                                                                    |
 
 ## Quickstart
 
@@ -97,11 +142,11 @@ The system prompt is
 ```
 
 ## Fun with StableLM-Tuned-Alpha
-This section contains a collection of fun cherry-picked examples of what you can do with `stablelm-tuned-alpha`. 
+This section contains a collection of fun cherry-picked examples of what you can do with `stablelm-tuned-alpha`.
 
 <details>
   <summary>Chit-Chat</summary>
-  
+
 ```
 User: Hey! My name is John nice to meet you!
 
@@ -123,12 +168,12 @@ User: Ah! Right. I can order a bouquet for her online and get it delivered! Than
 
 StableLM: You’re very welcome! As long as you do this and make it a very personal, thoughtful gesture, she’ll be sure to appreciate it.
  ```
- 
+
 </details>
 
 <details>
   <summary>Formal Writing</summary>
-  
+
   ```
  User: What would you say to a friend who is graduating high school?
 
@@ -223,7 +268,7 @@ He now knows the ins and outs of the TensorFlow programming language, and knows 
 
 ```
 
-### Humor 
+### Humor
 
 ```
 User: What do you know about the League of Legends champion Zed? Write a short bio
@@ -240,7 +285,7 @@ Zed has been a part of many memorable games, and his success in these games help
 
 User: Write a funny conversation after a team fight between Zed and Teemo
 
-StableLM: 
+StableLM:
 Teemo: “Hey Zed, great game today. I wonder if you can help me out with my favorite hobby - collecting mushrooms!”
 Zed: “Teemo, please. I’m not a mushroom collector.”
 Teemo: “But of course, you are. You have the best taste in the game.”
@@ -280,11 +325,11 @@ fib_sequence(10)
 </details>
 
 ## Selected failure modes of StableLM-Tuned-Alpha
-This section contains a collection of selected failure modes of `stablelm-tuned-alpha`. 
+This section contains a collection of selected failure modes of `stablelm-tuned-alpha`.
 
 <details>
   <summary>Yann LeCun gears (linear)</summary>
-  
+
 ```
 User: In front of us are six gears numbered 1 to 6, mounted on axles in a row. Each gear is engaged with the next gear. If gear number 3 is rotated clockwise, in which direction will gears 1 and 6 rotate?
 
@@ -292,12 +337,12 @@ StableLM: Each gear is engaged with the next gear after every other gear, so tha
 
 To determine the direction in which gears 1 and 6 will rotate, we need to look at the direction of the input force. Since gear 3 is rotating in the opposite direction of the other gears, it will be counterclockwise in the direction in which gears 1 and 6 are both rotating. Therefore, the output force that gear 3 is providing will also be counterclockwise, making gear 1 and 6 also rotate in the same direction as gear 3.
  ```
- 
+
 </details>
 
 <details>
   <summary>Yann LeCun gears (circular)</summary>
-  
+
 ```
 User: 7 axles are equally spaced around a circle. A gear is placed on each axle such that each gear is engaged with the gear to its left and the gear to its right. The gears are numbered 1 to 7 around the circle. If gear 3 were rotated clockwise, in which direction would gear 7 rotate?
 
@@ -309,7 +354,7 @@ According to the problem, gear 3 is situated at (d/2, 2 degrees) and the gears a
 
 Therefore, the answer is d = (7/2) * 2 = 5 degrees in total.
  ```
- 
+
 </details>
 
 ## Request for Help

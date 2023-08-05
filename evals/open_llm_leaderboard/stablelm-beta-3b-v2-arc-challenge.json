@@ -1,0 +1,21 @@
+{
+    "results": {
+        "arc_challenge": {
+            "acc": 0.36689419795221845,
+            "acc_norm": 0.3967576791808874
+        }
+    },
+    "versions": {
+        "arc_challenge": 0
+    },
+    "config": {
+        "model": "stabilityai/stablelm-base-alpha-3b-v2",
+        "num_fewshot": 25,
+        "batch_size": 8,
+        "device": "cuda:0",
+        "no_cache": true,
+        "limit": null,
+        "bootstrap_iters": 10000,
+        "description_dict": null
+    }
+}

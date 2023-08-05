@@ -1,0 +1,21 @@
+{
+    "results": {
+        "hellaswag": {
+            "acc": 0.5239992033459471,
+            "acc_norm": 0.7066321449910377
+        }
+    },
+    "versions": {
+        "hellaswag": 0
+    },
+    "config": {
+        "model": "stabilityai/stablelm-base-alpha-3b-v2",
+        "num_fewshot": 10,
+        "batch_size": 8,
+        "device": "cuda:0",
+        "no_cache": true,
+        "limit": null,
+        "bootstrap_iters": 10000,
+        "description_dict": null
+    }
+}
