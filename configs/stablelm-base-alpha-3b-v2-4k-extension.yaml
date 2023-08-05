@@ -1,0 +1,142 @@
+{
+  # parallelism settings
+  "pipe-parallel-size": 1,
+  "model-parallel-size": 2,
+
+  # model settings
+  "num-layers": 32,
+  "hidden-size": 2560,
+  "num-attention-heads": 32,
+  "seq-length": 4096,
+  "max-position-embeddings": 4096,
+
+  # architecture design
+  "attention_head_type": "multihead",
+  "norm": "layernorm",
+  "pos-emb": "rotary",
+  "rotary_pct": 0.25,
+  "rotary_interleaved": false,  # GPT-NeoX style
+  # NOTE: Linear Position Scaling degrades sample quality after 10B tokens - do not use yet.
+  # "rotary_scaling_factor": 2,  # 2048 -> 4096
+  "mlp_multiple_of": 256,
+  "mlp_type": "gated",
+  "activation": "silu",
+  "no-weight-tying": true,
+  "gpt_j_residual": true,
+  "gpt_j_tied": true,
+  "output_layer_parallelism": "column",
+
+  # biases
+  "use_bias_in_norms": true,
+  "use_bias_in_attn_linear": false,
+  "use_bias_in_mlp": false,
+
+  # fused ops
+  "bias-gelu-fusion": false,
+  "scaled-upper-triang-masked-softmax-fusion": true,
+  "attention-config": [[["flash"], 32]],
+
+  # optimizer settings
+  "optimizer": {
+    "type": "Adam",
+    "params": {
+      "lr": 2.8e-5,
+      "betas": [0.9, 0.95],
+      "eps": 1.0e-6
+    },
+  },
+  "min_lr": 2.8e-6,
+  "train-iters": 50_000,
+  "lr-decay-iters": 50_000,
+  "lr-decay-style": "cosine",
+  "warmup": 0.00,
+
+  # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
+  "zero_optimization": {
+    "stage": 1,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 1260000000,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 1260000000,
+    "contiguous_gradients": true,
+    "cpu_offload": false,
+  },
+
+  # batch / data settings
+  "train_micro_batch_size_per_gpu": 4,
+  "gradient_accumulation_steps": 1,
+  "data-impl": "mmap",
+  "eval-interval": 1_000,
+  "eval-iters": 10,
+  "eval_batch_size": 8,
+  "eval_tasks": ["lambada_openai", "piqa"],
+
+  # activation checkpointing
+  "checkpoint-activations": true,
+  "checkpoint-num-layers": 1,
+  "partition-activations": true,
+  "synchronize-each-layer": true,
+
+  # regularization
+  "gradient_clipping": 1.0,
+  "weight-decay": 0.0001,
+  "hidden-dropout": 0,
+  "attention-dropout": 0,
+
+  # precision settings
+  "fp16": {
+    "fp16": true,
+    "enabled": true,
+    "loss_scale": 0,
+    "loss_scale_window": 1000,
+    "initial_scale_power": 12,
+    "hysteresis": 2,
+    "min_loss_scale": 1e-10
+  },
+  "full_precision_lm_cross_entropy": true,
+
+  # misc. training settings
+  "num-workers": 1,
+  "distributed-backend": "nccl",
+
+  # checkpoint settings
+  "checkpoint-factor": 2_000,
+  "save": "",
+  "load": "",
+  "s3_path": "",
+  "iteration": 245_000,
+  "finetune": true,
+  "no_checkpoint_arg_validation": true,
+  "override_lr_scheduler": true,
+
+  # data path settings
+  "train-data-paths": [""],
+  "train-data-weights": [1.0],
+  "valid-data-paths": [""],
+  "valid-data-weights": [1.0],
+  "test-data-paths": [""],
+  "test-data-weights": [1.0],
+
+  # tokenizer settings
+  "tokenizer-type": "HFTokenizer",
+  "vocab-file": "neox-tokenizer-vocab.json",
+
+  # log settings
+  "log-interval": 10,
+  "steps_per_print": 10,
+  "wall_clock_breakdown": true,
+
+  "use_wandb": true,
+  "wandb_host": "",
+  "wandb_team": "",
+  "wandb_project": "",
+  "wandb_group": "7B",
+  "wandb_name": "stablelm-base-alpha-7b-v2-4k-finetune",
+  # "wandb_id": "",
+  # "wandb_resume": "must",
+
+  # multi-node launcher
+  "launcher": "slurm",
+  "deepspeed_slurm": true,
+}

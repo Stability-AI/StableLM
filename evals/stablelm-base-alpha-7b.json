@@ -1,0 +1,91 @@
+{
+    "results": {
+        "arc_challenge": {
+            "acc": 0.24829351535836178,
+            "acc_stderr": 0.012624912868089755,
+            "acc_norm": 0.27047781569965873,
+            "acc_norm_stderr": 0.012980954547659556
+        },
+        "arc_easy": {
+            "acc": 0.5054713804713805,
+            "acc_stderr": 0.01025916922861504,
+            "acc_norm": 0.44865319865319864,
+            "acc_norm_stderr": 0.010205540414612876
+        },
+        "boolq": {
+            "acc": 0.600611620795107,
+            "acc_stderr": 0.008566178448007831
+        },
+        "hellaswag": {
+            "acc": 0.3467436765584545,
+            "acc_stderr": 0.004749606196363328,
+            "acc_norm": 0.41216889065923124,
+            "acc_norm_stderr": 0.004912192800263316
+        },
+        "lambada_openai": {
+            "ppl": 9.459674222745228,
+            "ppl_stderr": 0.33183598007493614,
+            "acc": 0.5511352610130021,
+            "acc_stderr": 0.006929452414790843
+        },
+        "openbookqa": {
+            "acc": 0.214,
+            "acc_stderr": 0.018359797502387025,
+            "acc_norm": 0.32,
+            "acc_norm_stderr": 0.02088234048876181
+        },
+        "piqa": {
+            "acc": 0.6675734494015234,
+            "acc_stderr": 0.010991141557445587,
+            "acc_norm": 0.6735582154515778,
+            "acc_norm_stderr": 0.010940467046177304
+        },
+        "sciq": {
+            "acc": 0.801,
+            "acc_stderr": 0.012631649083099177,
+            "acc_norm": 0.697,
+            "acc_norm_stderr": 0.014539683710535257
+        },
+        "siqa": {
+            "acc": 0.394575230296827,
+            "acc_stderr": 0.011059713589720797,
+            "acc_norm": 0.4140225179119754,
+            "acc_norm_stderr": 0.011145545345176117
+        },
+        "truthfulqa_mc": {
+            "mc1": 0.23745410036719705,
+            "mc1_stderr": 0.014896277441041836,
+            "mc2": 0.3995908363542637,
+            "mc2_stderr": 0.014371652685680641
+        },
+        "winogrande": {
+            "acc": 0.5011838989739542,
+            "acc_stderr": 0.014052446290529012
+        }
+    },
+    "versions": {
+        "arc_challenge": 0,
+        "arc_easy": 0,
+        "boolq": 1,
+        "hellaswag": 0,
+        "lambada_openai": 0,
+        "openbookqa": 0,
+        "piqa": 0,
+        "sciq": 0,
+        "siqa": 0,
+        "truthfulqa_mc": 1,
+        "winogrande": 0
+    },
+    "config": {
+        "model": "gpt2",
+        "model_args": "use_fast=True,pretrained=stabilityai/stablelm-base-alpha-7b,trust_remote_code=True,low_cpu_mem_usage=True,dtype=auto",
+        "num_fewshot": 0,
+        "batch_size": "2",
+        "batch_sizes": [],
+        "device": "cuda:1",
+        "no_cache": true,
+        "limit": null,
+        "bootstrap_iters": 100000,
+        "description_dict": {}
+    }
+}

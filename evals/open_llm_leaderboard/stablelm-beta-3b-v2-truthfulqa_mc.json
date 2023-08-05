@@ -1,0 +1,21 @@
+{
+    "results": {
+        "truthfulqa_mc": {
+            "mc1": 0.22399020807833536,
+            "mc2": 0.35873137294835583
+        }
+    },
+    "versions": {
+        "truthfulqa_mc": 1
+    },
+    "config": {
+        "model": "stabilityai/stablelm-base-alpha-3b-v2",
+        "num_fewshot": 0,
+        "batch_size": 8,
+        "device": "cuda:0",
+        "no_cache": true,
+        "limit": null,
+        "bootstrap_iters": 10000,
+        "description_dict": null
+    }
+}

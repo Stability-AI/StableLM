@@ -1,0 +1,91 @@
+{
+  "results": {
+    "arc_challenge": {
+      "acc": 0.3771331058020478,
+      "acc_stderr": 0.014163366896192593,
+      "acc_norm": 0.39419795221843,
+      "acc_norm_stderr": 0.014280522667467323
+    },
+    "arc_easy": {
+      "acc": 0.7234848484848485,
+      "acc_stderr": 0.00917788010146828,
+      "acc_norm": 0.6919191919191919,
+      "acc_norm_stderr": 0.009473887075826333
+    },
+    "boolq": {
+      "acc": 0.7076452599388379,
+      "acc_stderr": 0.00795527890990574
+    },
+    "hellaswag": {
+      "acc": 0.5256920932085242,
+      "acc_stderr": 0.004983189711208505,
+      "acc_norm": 0.7033459470225055,
+      "acc_norm_stderr": 0.004558491550673688
+    },
+    "lambada_openai": {
+      "ppl": 3.9176883876529036,
+      "ppl_stderr": 0.08360630042095321,
+      "acc": 0.713370851930914,
+      "acc_stderr": 0.006299845944000654
+    },
+    "openbookqa": {
+      "acc": 0.29,
+      "acc_stderr": 0.020313179231745186,
+      "acc_norm": 0.406,
+      "acc_norm_stderr": 0.021983962090086333
+    },
+    "piqa": {
+      "acc": 0.7714907508161044,
+      "acc_stderr": 0.009796313511829524,
+      "acc_norm": 0.7736670293797606,
+      "acc_norm_stderr": 0.009763294246879415
+    },
+    "sciq": {
+      "acc": 0.927,
+      "acc_stderr": 0.008230354715244055,
+      "acc_norm": 0.897,
+      "acc_norm_stderr": 0.009616833339695796
+    },
+    "siqa": {
+      "acc": 0.4257932446264074,
+      "acc_stderr": 0.011188771652377858,
+      "acc_norm": 0.44882292732855683,
+      "acc_norm_stderr": 0.011254649314820132
+    },
+    "truthfulqa_mc": {
+      "mc1": 0.23011015911872704,
+      "mc1_stderr": 0.014734557959807769,
+      "mc2": 0.3301333660822527,
+      "mc2_stderr": 0.012995959559501016
+    },
+    "winogrande": {
+      "acc": 0.6432517758484609,
+      "acc_stderr": 0.013463393958028733
+    }
+  },
+  "versions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "boolq": 1,
+    "hellaswag": 0,
+    "lambada_openai": 0,
+    "openbookqa": 0,
+    "piqa": 0,
+    "sciq": 0,
+    "siqa": 0,
+    "truthfulqa_mc": 1,
+    "winogrande": 0
+  },
+  "config": {
+    "model": "gpt2",
+    "model_args": "use_fast=True,pretrained=togethercomputer/RedPajama-INCITE-7B-Base,low_cpu_mem_usage=True,dtype=auto",
+    "num_fewshot": 0,
+    "batch_size": "8",
+    "batch_sizes": [],
+    "device": "cuda:2",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
