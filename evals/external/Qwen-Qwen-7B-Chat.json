@@ -1,0 +1,84 @@
+{
+  "results": {
+    "arc_challenge": {
+      "acc": 0.45563139931740615,
+      "acc_stderr": 0.014553749939306863,
+      "acc_norm": 0.4667235494880546,
+      "acc_norm_stderr": 0.014578995859605797
+    },
+    "arc_easy": {
+      "acc": 0.6919191919191919,
+      "acc_stderr": 0.00947388707582633,
+      "acc_norm": 0.6447811447811448,
+      "acc_norm_stderr": 0.009820245899287122
+    },
+    "boolq": {
+      "acc": 0.7168195718654434,
+      "acc_stderr": 0.007880052012351937
+    },
+    "hellaswag": {
+      "acc": 0.6792471619199363,
+      "acc_stderr": 0.004658120152230809,
+      "acc_norm": 0.8497311292571201,
+      "acc_norm_stderr": 0.003566044777327419
+    },
+    "lambada_openai": {
+      "ppl": 4.258406715958618,
+      "ppl_stderr": 0.1263040238577051,
+      "acc": 0.6547642150203765,
+      "acc_stderr": 0.006623879809039193
+    },
+    "openbookqa": {
+      "acc": 0.356,
+      "acc_stderr": 0.021434712356072652,
+      "acc_norm": 0.462,
+      "acc_norm_stderr": 0.02231833811987053
+    },
+    "piqa": {
+      "acc": 0.7872687704026116,
+      "acc_stderr": 0.00954822312304733,
+      "acc_norm": 0.7992383025027203,
+      "acc_norm_stderr": 0.00934596167482341
+    },
+    "sciq": {
+      "acc": 0.907,
+      "acc_stderr": 0.00918887563499669,
+      "acc_norm": 0.806,
+      "acc_norm_stderr": 0.012510816141264359
+    },
+    "siqa": {
+      "acc": 0.4703172978505629,
+      "acc_stderr": 0.011294116144908552,
+      "acc_norm": 0.47389969293756395,
+      "acc_norm_stderr": 0.01129864516098083
+    },
+    "winogrande": {
+      "acc": 0.6858721389108129,
+      "acc_stderr": 0.01304541671607256
+    }
+  },
+  "versions": {
+    "arc_challenge": 0,
+    "arc_easy": 0,
+    "boolq": 1,
+    "hellaswag": 0,
+    "lambada_openai": 0,
+    "openbookqa": 0,
+    "piqa": 0,
+    "sciq": 0,
+    "siqa": 0,
+    "winogrande": 0
+  },
+  "config": {
+    "model": "gpt2",
+    "model_args": "pretrained=Qwen/Qwen-7B-Chat,trust_remote_code=True,low_cpu_mem_usage=True,dtype=auto",
+    "num_fewshot": 0,
+    "batch_size": "8",
+    "batch_sizes": [],
+    "device": "cuda:4",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}
