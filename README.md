@@ -1,11 +1,15 @@
 # StableLM: Stability AI Language Models
 
-![Stochastic Parrot](/assets/mascot.png)
+![Stochastic Parrot](./assets/mascot.png)
 <br/>*“A Stochastic Parrot, flat design, vector art” — [Stable Diffusion XL](https://clipdrop.co/stable-diffusion)*
 
 This repository contains Stability AI's ongoing development of the StableLM series of language models and will be continuously updated with new checkpoints. The following provides an overview of all currently available models. More coming soon.
 
 ## News
+
+*September 29, 2023*
+
+- Released StableLM-3B-4E1T model under [CC BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 *August 5, 2023*
 
@@ -23,9 +27,72 @@ This repository contains Stability AI's ongoing development of the StableLM seri
 
 ## Models
 
+### StableLM-3B-4E1T
+
+> Technical Report: [StableLM-3B-4E1T](https://stability.wandb.io/stability-llm/stable-lm/reports/StableLM-3B-4E1T--VmlldzoyMjU4?accessToken=u3zujipenkx5g7rtcj9qojjgxpconyjktjkli2po09nffrffdhhchq045vp0wyfo)
+
+StableLM-3B-4E1T is a 3 billion (3B) parameter language model pre-trained under the multi-epoch regime to study the impact of repeated tokens on downstream performance. Given prior success in this area ([Tay et al., 2023](https://arxiv.org/pdf/2205.05131.pdf) and [Taylor et al., 2022](https://galactica.org/static/paper.pdf)), we train on 1 trillion (1T) tokens for 4 epochs following the observations of [Muennighoff et al. (2023)](https://arxiv.org/abs/2305.16264) in "Scaling Data-Constrained Language Models" in which they find "training with up to 4 epochs of repeated data yields negligible changes to loss compared to having unique data." Further inspiration for the token count is taken from "Go smol or go home" ([De Vries, 2023](https://www.harmdevries.com/post/model-size-vs-compute-overhead/)), which suggests a 2.96B model trained for 2.85 trillion tokens achieves a similar loss to a Chinchilla compute-optimal 9.87B language model ($k_n = 0.3$).
+
+| Size | StableLM-3B-4E1T                                                     | Training Tokens | Parameters    |
+|------|--------------------------------------------------------------------|-----------------|---------------|
+| 3B   | [checkpoint](https://huggingface.co/stabilityai/stablelm-3b-4e1t) | 4T              | 2,795,443,200 |
+
+#### Model Architecture
+
+The model is a decoder-only transformer similar to the LLaMA ([Touvron et al., 2023](https://arxiv.org/abs/2307.09288)) architecture with the following modifications:
+
+| Parameters     | Hidden Size | Layers | Heads | Sequence Length |
+|----------------|-------------|--------|-------|-----------------|
+| 2,795,443,200  | 2560        | 32     | 32    | 4096            |
+
+- **Position Embeddings**: Rotary Position Embeddings ([Su et al., 2021](https://arxiv.org/abs/2104.09864)) applied to the first 25% of head embedding dimensions for improved throughput following [Black et al. (2022)](https://arxiv.org/pdf/2204.06745.pdf).
+- **Normalization**: LayerNorm ([Ba et al., 2016](https://arxiv.org/abs/1607.06450)) with learned bias terms as opposed to RMSNorm ([Zhang & Sennrich, 2019](https://arxiv.org/abs/1910.07467)).
+- **Tokenizer**: GPT-NeoX ([Black et al., 2022](https://arxiv.org/abs/2204.06745)).
+
+#### Training Data
+
+The dataset is comprised of a filtered mixture of open-source large-scale datasets available on the [HuggingFace Hub](https://huggingface.co/datasets): Falcon RefinedWeb extract ([Penedo et al., 2023](https://huggingface.co/datasets/tiiuae/falcon-refinedweb)), RedPajama-Data ([Together Computer., 2023](https://github.com/togethercomputer/RedPajama-Data)) and The Pile ([Gao et al., 2020](https://arxiv.org/abs/2101.00027)) both without the *Books3* subset, and StarCoder ([Li et al., 2023](https://arxiv.org/abs/2305.06161)).
+
+> Given the large amount of web data, we recommend fine-tuning the base StableLM-3B-4E1T for your downstream tasks.
+
+#### Training Details
+
+Please refer to the provided YAML configuration file [`stablelm-3b-4e1t.yml`](./configs/stablelm-3b-4e1t.yml) for complete hyperparameter settings and the [technical report](https://stability.wandb.io/stability-llm/stable-lm/reports/StableLM-3B-4E1T--VmlldzoyMjU4?accessToken=u3zujipenkx5g7rtcj9qojjgxpconyjktjkli2po09nffrffdhhchq045vp0wyfo) for further details.
+
+#### Downstream Results
+
+The following zero-shot evaluations are performed with the `lm-evaluation-harness` using the [lm-bench](https://github.com/Stability-AI/lm-evaluation-harness/tree/lm-bench) branch of Stability AI's fork. Full `lm-eval` JSONs can be found in the [`evals`](./evals) directory.
+
+| Pre-Trained Model                                                                     | Average  | ARC<br>Challenge | ARC<br>Easy | BoolQ | HellaSwag (✱) | LAMBADA<br>OpenAI | OpenBookQA | PIQA  | SciQ  | Winogrande |
+| ------------------------------------------------------------------------------------- |:-----------------:|:----------------:|:-----------:|:-----:|:-------------:|:-----------------:|:----------:|:-----:|:-----:|:----------:|
+| meta-llama/Llama-2-13b-hf                                                             | 71.77             | 48.63            | 79.50       | 80.52 | 79.36         | 76.77             | 35.40      | 79.05 | 94.50 | 72.22      |
+| huggyllama/llama-7b                                                                   | 68.84             | 41.89            | 75.25       | 75.05 | 76.22         | 73.55             | 34.40      | 78.67 | 94.60 | 69.93      |
+| meta-llama/Llama-2-7b-hf                                                              | 68.75             | 43.00            | 76.26       | 77.74 | 75.94         | 73.47             | 31.40      | 77.75 | 93.60 | 69.61      |
+| Qwen/Qwen-7B                                                                          | 67.91             | 45.39            | 67.38       | 74.56 | 88.85 (?)     | 69.67             | 32.20      | 73.99 | 93.20 | 65.98      |
+| tiiuae/falcon-7b                                                                      | 67.83             | 40.27            | 74.41       | 73.55 | 76.35         | 74.56             | 30.60      | 79.49 | 94.00 | 67.25      |
+| mosaicml/mpt-7b                                                                       | 67.36             | 40.53            | 74.92       | 73.94 | 76.17         | 68.64             | 31.40      | 78.89 | 93.70 | 68.03      |
+| **stabilityai/stablelm-3b-4e1t**                                                     | 66.93             | 37.80            | 72.47       | 75.63 | 73.90         | 70.64             | 31.40      | 79.22 | 94.80 | 66.54      |
+| baichuan-inc/Baichuan2-7B-Base                                                        | 66.93             | 42.24            | 75.00       | 73.09 | 72.29         | 70.99             | 30.40      | 76.17 | 94.60 | 67.56      |
+| stabilityai/stablelm-base-alpha-7b-v2                                                 | 66.89             | 38.48            | 73.19       | 70.31 | 74.27         | 74.19             | 30.40      | 78.45 | 93.90 | 68.82      |
+| openlm-research/open_llama_7b_v2                                                      | 66.32             | 38.82            | 71.93       | 71.41 | 74.65         | 71.05             | 30.20      | 79.16 | 93.80 | 65.82      |
+| microsoft/phi-1_5                                                                     | 65.57             | 44.45            | 76.14       | 74.53 | 62.62         | 52.75             | 37.60      | 76.33 | 93.20 | 72.53      |
+| EleutherAI/gpt-neox-20B                                                               | 65.57             | 37.88            | 72.90       | 69.48 | 71.43         | 71.98             | 29.80      | 77.42 | 93.10 | 66.14      |
+| togethercomputer/RedPajama-INCITE-7B-Base                                             | 65.07             | 37.71            | 72.35       | 70.76 | 70.33         | 71.34             | 29.00      | 77.15 | 92.70 | 64.33      |
+| cerebras/btlm-3b-8k-base (§)                                                          | 63.59             | 34.90            | 70.45       | 69.63 | 69.78         | 66.23             | 27.60      | 75.84 | 92.90 | 64.96      |
+| EleutherAI/pythia-12b                                                                 | 62.69             | 31.83            | 70.20       | 67.31 | 67.38         | 70.64             | 26.40      | 76.28 | 90.20 | 64.01      |
+| openlm-research/open_llama_3b_v2                                                      | 62.43             | 33.87            | 67.59       | 65.69 | 69.99         | 66.74             | 26.00      | 76.66 | 92.40 | 62.90      |
+| EleutherAI/gpt-j-6B                                                                   | 62.34             | 33.96            | 66.96       | 65.44 | 66.24         | 68.23             | 29.00      | 75.57 | 91.50 | 64.17      |
+| stabilityai/stablelm-base-alpha-3b-v2                                                 | 62.19             | 32.42            | 67.26       | 64.56 | 68.58         | 70.25             | 26.40      | 76.01 | 92.10 | 62.12      |
+| facebook/opt-6.7b                                                                     | 61.85             | 30.72            | 65.66       | 66.02 | 67.20         | 67.65             | 27.60      | 76.33 | 90.10 | 65.35      |
+| EleutherAI/pythia-6.9b                                                                | 60.58             | 31.83            | 67.21       | 64.01 | 63.88         | 67.01             | 25.80      | 75.08 | 89.80 | 60.62      |
+| EleutherAI/pythia-2.8b-deduped                                                        | 58.52             | 30.12            | 63.47       | 64.13 | 59.44         | 65.15             | 23.80      | 74.10 | 88.20 | 58.25      |
+| **§** Previous 3B Pre-Trained SOTA <br>**?** Outlier Reuslts<br>**\*** Byte-length Normalized Accuracy |                   |                  |             |       |               |                   |            |       |       |            |
+
+**StableLM-3B-4E1T achieves state-of-the-art performance (September 2023) at the 3B parameter scale for open-source models** and is competitive with many of the popular contemporary 7B models, even outperforming our most recent 7B StableLM-Base-Alpha-v2.
+
 ### StableLM-Alpha v2
 
-StableLM-Alpha v2 models significantly improve on the initial Alpha models by incorporating architectural improvements such as SwiGLU ([Shazeer, 2020](https://arxiv.org/abs/2002.05202)) and using higher-quality data sources, as discussed below.  The context length for these models is 4096 tokens.
+StableLM-Alpha v2 models significantly improve on the initial Alpha models by incorporating architectural improvements such as SwiGLU ([Shazeer, 2020](https://arxiv.org/abs/2002.05202)) and using higher-quality data sources, as discussed below. The context length for these models is 4096 tokens.
 
 | Size | StableLM-Base-Alpha-v2                                                     | Training Tokens | Parameters    |
 |------|----------------------------------------------------------------------------|-----------------|---------------|
@@ -34,7 +101,7 @@ StableLM-Alpha v2 models significantly improve on the initial Alpha models by in
 
 #### Training Details
 
-Please refer to the provided YAML configuration files for hyperparameter details. E.g. for the extended `StableLM-Alpha-3B-v2` model, see [stablelm-base-alpha-3b-v2-4k-extension.yaml](./configs/stablelm-base-alpha-3b-v2-4k-extension.yaml).
+Please refer to the provided YAML configuration files for hyperparameter details. E.g. for the extended `StableLM-Alpha-3B-v2` model, see [stablelm-base-alpha-3b-v2-4k-extension.yml](./configs/stablelm-base-alpha-3b-v2-4k-extension.yml).
 
 Following similar work, we use a multi-stage approach to context length extension ([Nijkamp et al., 2023](https://blog.salesforceairesearch.com/xgen/)), scheduling 1 trillion tokens at context length 2048 followed by 100 billion tokens at 4096. We found that sequence length warmup ([Li et al., 2022](https://arxiv.org/abs/2108.06084)) helped stabilize early spikes during the first ~80 billion tokens of pre-training. However, it was not applied to the final runs due to significant throughput penalties as length shapes grew across the curriculum.
 

@@ -1,0 +1,32 @@
+{
+  "results": {
+    "lambada_openai": {
+      "ppl": 3.569586285393247,
+      "ppl_stderr": 0.07265272740503036,
+      "acc": 0.7209392586842616,
+      "acc_stderr": 0.006249003708978234
+    },
+    "sciq": {
+      "acc": 0.941,
+      "acc_stderr": 0.007454835650406722,
+      "acc_norm": 0.914,
+      "acc_norm_stderr": 0.008870325962594766
+    }
+  },
+  "versions": {
+    "lambada_openai": 0,
+    "sciq": 0
+  },
+  "config": {
+    "model": "gpt2",
+    "model_args": "use_fast=False,pretrained=openlm-research/open_llama_13b,trust_remote_code=True,low_cpu_mem_usage=True,dtype=auto",
+    "num_fewshot": 0,
+    "batch_size": "2",
+    "batch_sizes": [],
+    "device": "cuda:3",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}

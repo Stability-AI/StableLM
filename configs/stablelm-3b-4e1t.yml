@@ -1,0 +1,133 @@
+{
+  # parallelism settings
+  "pipe-parallel-size": 1,
+  "model-parallel-size": 1,
+
+  # model settings
+  "num-layers": 32,
+  "hidden-size": 2560,
+  "num-attention-heads": 32,
+  "seq-length": 4096,
+  "max-position-embeddings": 4096,
+
+  # architecture design
+  "attention_head_type": "multihead",
+  "norm": "layernorm",
+  "pos-emb": "rotary",
+  "rotary_pct": 0.25,
+  "rotary_interleaved": false,
+  "mlp_multiple_of": 256,
+  "mlp_type": "gated",
+  "activation": "silu",
+  "no-weight-tying": true,
+  "gpt_j_residual": false,
+  "gpt_j_tied": false,
+  "output_layer_parallelism": "column",
+
+  # init methods
+  "output_layer_init_method": "scaled_normal",
+
+  # biases
+  "use_bias_in_norms": true,
+  "use_bias_in_attn_linear": false,
+  "use_bias_in_mlp": false,
+
+  # fused ops
+  "attention-config": [[["flash"], 32]],
+
+  # optimizer settings
+  "optimizer": {
+    "type": "Adam",
+    "params": {
+      "lr": 3.2e-4,
+      "betas": [0.9, 0.95],
+      "eps": 1.0e-6
+    },
+  },
+  "min_lr": 1.28e-5,  # Decay to 4% of lr
+  # 955_000 iters ~= 4.0T tokens at bs=4M
+  "train-iters": 955_000,
+  "lr-decay-iters": 955_000,
+  "lr-decay-style": "cosine",
+  "warmup": 0.005,  # ~5k warmup steps
+
+  # ZeRO settings
+  "zero_optimization": {
+    "stage": 1,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 1260000000,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 1260000000,
+    "contiguous_gradients": true,
+    "cpu_offload": false,
+  },
+
+  # batch / data settings
+  "train_micro_batch_size_per_gpu": 4,
+  "gradient_accumulation_steps": 1,
+  "data-impl": "mmap",
+  "eval-interval": 5_000,
+  "eval-iters": 10,
+  "eval_batch_size": 8,
+  "eval_tasks": [],
+
+  # activation checkpointing
+  "checkpoint-activations": true,
+  "checkpoint-num-layers": 1,
+  "partition-activations": true,
+  "synchronize-each-layer": true,
+
+  # regularization
+  "gradient_clipping": 1.0,
+  "weight-decay": 0.1,
+  "hidden-dropout": 0,
+  "attention-dropout": 0,
+
+  # precision settings
+  "bf16": { "enabled": true },
+  "precision": "bfloat16",
+  "full_precision_lm_cross_entropy": true,
+
+  # misc. training settings
+  "num-workers": 2,
+  "distributed-backend": "nccl",
+
+  # checkpoint settings
+  "checkpoint-factor": 2_000,
+  "s3_sync_interval": 10_000,
+  "extra-save-iters": [0],
+  "save": "",
+  "load": "",
+  "s3_path": "",
+
+  # data path settings
+  "train-data-paths": [],
+  "train-data-weights": [],
+  "valid-data-paths": [],
+  "valid-data-weights": [],
+  "test-data-paths": [],
+  "test-data-weights": [],
+
+  # tokenizer settings
+  "tokenizer-type": "HFTokenizer",
+  "vocab-file": "neox-tokenizer-vocab.json",
+
+  # log settings
+  "log-interval": 10,
+  "steps_per_print": 10,
+  "wall_clock_breakdown": true,
+
+  "use_wandb": true,
+  "wandb_host": "",
+  "wandb_team": "",
+  "wandb_project": "",
+  "wandb_group": "",
+  "wandb_name": "",
+  # "wandb_id": "",
+  # "wandb_resume": "",
+
+  # multi-node launcher
+  "launcher": "slurm",
+  "deepspeed_slurm": true,
+}
