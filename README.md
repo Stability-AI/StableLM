@@ -29,7 +29,7 @@ This repository contains Stability AI's ongoing development of the StableLM seri
 
 ### StableLM-3B-4E1T
 
-> Technical Report: [StableLM-3B-4E1T](https://stability.wandb.io/stability-llm/stable-lm/reports/StableLM-3B-4E1T--VmlldzoyMjU4)
+> Technical Report: [StableLM-3B-4E1T](https://stability.wandb.io/stability-llm/stable-lm/reports/StableLM-3B-4E1T--VmlldzoyMjU4?accessToken=u3zujipenkx5g7rtcj9qojjgxpconyjktjkli2po09nffrffdhhchq045vp0wyfo)
 
 StableLM-3B-4E1T is a 3 billion (3B) parameter language model pre-trained under the multi-epoch regime to study the impact of repeated tokens on downstream performance. Given prior success in this area ([Tay et al., 2023](https://arxiv.org/pdf/2205.05131.pdf) and [Taylor et al., 2022](https://galactica.org/static/paper.pdf)), we train on 1 trillion (1T) tokens for 4 epochs following the observations of [Muennighoff et al. (2023)](https://arxiv.org/abs/2305.16264) in "Scaling Data-Constrained Language Models" in which they find "training with up to 4 epochs of repeated data yields negligible changes to loss compared to having unique data." Further inspiration for the token count is taken from "Go smol or go home" ([De Vries, 2023](https://www.harmdevries.com/post/model-size-vs-compute-overhead/)), which suggests a 2.96B model trained for 2.85 trillion tokens achieves a similar loss to a Chinchilla compute-optimal 9.87B language model ($k_n = 0.3$).
 
@@ -57,7 +57,7 @@ The dataset is comprised of a filtered mixture of open-source large-scale datase
 
 #### Training Details
 
-Please refer to the provided YAML configuration file [`stablelm-3b-4e1t.yml`](./configs/stablelm-3b-4e1t.yml) for complete hyperparameter settings and the [technical report](https://stability.wandb.io/stability-llm/stable-lm/reports/StableLM-3B-4E1T--VmlldzoyMjU4) for further details.
+Please refer to the provided YAML configuration file [`stablelm-3b-4e1t.yml`](./configs/stablelm-3b-4e1t.yml) for complete hyperparameter settings and the [technical report](https://stability.wandb.io/stability-llm/stable-lm/reports/StableLM-3B-4E1T--VmlldzoyMjU4?accessToken=u3zujipenkx5g7rtcj9qojjgxpconyjktjkli2po09nffrffdhhchq045vp0wyfo) for further details.
 
 #### Downstream Results
 
