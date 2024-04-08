@@ -1,0 +1,148 @@
+{
+  # parallelism settings
+  "pipe-parallel-size": 0,
+  "model-parallel-size": 1,
+
+  # model settings
+  "num-layers": 24,
+  "hidden-size": 2048,
+  "num-attention-heads": 32,
+  "seq-length": 4096,
+  "max-position-embeddings": 4096,
+
+  # architecture design
+  "attention_head_type": "multihead",
+  "norm": "layernorm",
+  "pos-emb": "rotary",
+  "rotary_pct": 0.25,
+  "rotary_interleaved": false,  # GPT-NeoX style
+  "mlp_multiple_of": 256,
+  "mlp_type": "gated",
+  "activation": "silu",
+  "no-weight-tying": true,
+  "gpt_j_residual": false,
+  "gpt_j_tied": false,
+  "output_layer_parallelism": "column",
+
+  # init methods
+  "init_method": "normal",
+  "output_layer_init_method": "scaled_normal",
+  "init_method_std": 0.02,
+
+  # biases
+  "use_bias_in_norms": false,
+  "use_bias_in_attn_linear": false,
+  "use_bias_in_mlp": false,
+
+  # fused ops
+  "use_flash_cross_entropy": true,
+  "bias-gelu-fusion": false,
+  "scaled-upper-triang-masked-softmax-fusion": false,
+  "attention-config": [[["flash"], 24]],
+
+  # optimizer settings
+  "optimizer": {
+    "type": "Adam",
+    "params": {
+      "lr": 0.001,
+      "betas": [0.9, 0.95],
+      "eps": 1.0e-8,
+    }
+  },
+  "min_lr": 0.0001,
+  "train-iters": 540_000,
+  "lr-decay-iters": 540_000,
+  "lr-decay-style": "hybrid_cosine_inv_sqrt_2",
+  "warmup": 0.018,
+  "cooldown": 0.,
+
+  "reset_attention_mask": true,
+  "reset_position_ids": true,
+
+  # for all zero_optimization options, see https://www.deepspeed.ai/docs/config-json/#zero-optimizations-for-fp16-training
+  "zero_optimization": {
+    "stage": 1,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 1260000000,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 1260000000,
+    "contiguous_gradients": true,
+    "cpu_offload": false,
+  },
+
+  # batch / data settings
+  "train_micro_batch_size_per_gpu": 2,
+  "gradient_accumulation_steps": 2,
+  "data-impl": "mmap",
+  "eval-interval": 500_000,
+  "eval-iters": 1,
+  "eval_batch_size": 1,
+  "eval_tasks": [],
+
+  # activation checkpointing
+  "checkpoint-activations": true,
+  "checkpoint-num-layers": 24,
+  "partition-activations": true,
+  "synchronize-each-layer": true,
+
+  # regularization
+  "gradient_clipping": 1,
+  "weight-decay": 0.1,
+  "hidden-dropout": 0.,
+  "attention-dropout": 0.,
+
+  # precision settings
+  "bf16": { "enabled": true },
+  "precision": "bfloat16",
+  "full_precision_lm_cross_entropy": true,
+  "fp32_allreduce": true,
+
+  # misc. training settings
+  "num-workers": 2,
+  "distributed-backend": "nccl",
+
+  # checkpoint settings
+  "checkpoint-factor": 2_000,
+  "s3_sync_interval": 20_000,
+  "extra-save-iters": [0],
+  "save": "",
+  "load": "",
+  "s3_path": "",
+
+  "train_data_paths": [],
+  "train_data_weights": [],
+  "valid-data-paths": ["minipile_validation_arcade100k_tokenized_text_document"],
+  "valid-data-weights": [1.0,],
+  "test-data-paths": ["minipile_validation_arcade100k_tokenized_text_document"],
+  "test-data-weights": [1.0,],
+
+  # tokenizer settings
+  "tokenizer-type": "TiktokenTokenizer",
+  "vocab-file": "arcade100k.tiktoken",
+
+  "log-interval": 10,
+  "steps_per_print": 10,
+  "wall_clock_breakdown": true,
+
+  "use_wandb": true,
+  "wandb_host": "https://stability.wandb.io",
+  "wandb_team": "stability-llm",
+  "wandb_project": "",
+  "wandb_group": "",
+  "wandb_name": "",
+  # "wandb_id": "",
+  # "wandb_resume": "must",
+
+  # MuP
+  "use-mup": false,
+  "save-base-shapes": false , # this only needs to be enabled once in order to generate the base-shapes-file on each rank
+  "base-shapes-file": "mup-base-shapes-small-fixed/base-shapes-small", # load base shapes from this file
+  "coord-check": false, # generate coord check plots to verify mup's implementation in neox
+
+  # multi-node launcher
+  "launcher": "slurm",
+  "deepspeed_slurm": true,
+
+  "seed": 1234
+}
